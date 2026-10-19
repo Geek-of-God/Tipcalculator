@@ -23,8 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.res.stringResource
 import java.text.NumberFormat
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.MaterialTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -73,6 +75,10 @@ fun EditNumberField(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number
         ),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color(0xFFF5DDE1),
+            unfocusedContainerColor = Color(0xFFF5DDE1)
+        ),
         modifier = modifier
     )
 }
@@ -95,13 +101,14 @@ fun TipTimeLayout(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(40.dp),
+            .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
         Text(
-            text = stringResource(R.string.calculate_tip)
+            text = stringResource(R.string.calculate_tip),
+            style = MaterialTheme.typography.titleMedium
         )
 
         Spacer(
