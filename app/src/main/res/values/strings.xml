@@ -9,4 +9,6 @@
 
     <string name="tip_amount">Tip Amount: %s</string>
 
+    <string name="tip_percentage">Tip Percentage</string>
+
 </resources>
