@@ -63,18 +63,7 @@ fun EditNumberField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = {
-            Text(stringResource(R.string.bill_amount))
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal
-        ),
-        modifier = modifier
-    )
+
 }
 
 
