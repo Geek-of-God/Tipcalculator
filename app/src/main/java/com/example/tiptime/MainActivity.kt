@@ -27,6 +27,7 @@ import java.text.NumberFormat
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.annotation.StringRes
 
 
 
@@ -53,12 +54,15 @@ private fun calculateTip(
 
     val tip = tipPercent / 100 * amount
 
-    return NumberFormat.getCurrencyInstance().format(tip)
+    return NumberFormat
+        .getCurrencyInstance()
+        .format(tip)
 }
 
 
 @Composable
 fun EditNumberField(
+    @StringRes label: Int,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -67,7 +71,7 @@ fun EditNumberField(
         value = value,
         onValueChange = onValueChange,
         label = {
-            Text(stringResource(R.string.bill_amount))
+            Text(stringResource(label))
         },
         singleLine = true,
         keyboardOptions = KeyboardOptions(
@@ -76,7 +80,6 @@ fun EditNumberField(
         modifier = modifier
     )
 }
-
 
 
 @Composable
@@ -88,19 +91,26 @@ fun TipTimeLayout(
         mutableStateOf("")
     }
 
+    var tipInput by remember {
+        mutableStateOf("")
+    }
+
     val amount = amountInput.toDoubleOrNull() ?: 0.0
 
-    val tip = calculateTip(amount)
+    val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
+
+    val tip = calculateTip(
+        amount,
+        tipPercent
+    )
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .statusBarsPadding()
             .padding(horizontal = 40.dp)
             .safeDrawingPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-
-
     ) {
 
         Text(
@@ -110,20 +120,22 @@ fun TipTimeLayout(
                 .align(Alignment.Start)
         )
 
-        Spacer(
-            modifier = Modifier.height(16.dp)
-        )
-
         EditNumberField(
+            label = R.string.bill_amount,
             value = amountInput,
             onValueChange = { amountInput = it },
             modifier = Modifier
-                .padding(bottom = 32.dp)
+                .padding(bottom = 16.dp)
                 .fillMaxWidth()
         )
 
-        Spacer(
-            modifier = Modifier.height(24.dp)
+        EditNumberField(
+            label = R.string.tip_percentage,
+            value = tipInput,
+            onValueChange = { tipInput = it },
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth()
         )
 
         Text(
