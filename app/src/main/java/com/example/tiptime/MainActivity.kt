@@ -30,6 +30,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.annotation.StringRes
 import kotlin.math.ceil
 import androidx.compose.material3.Switch
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.text.input.ImeAction
 
 
 
@@ -94,10 +97,11 @@ fun RoundTheTipRow(
 @Composable
 fun EditNumberField(
     @StringRes label: Int,
+    keyboardOptions: KeyboardOptions,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
-) {
+){
     TextField(
         value = value,
         onValueChange = onValueChange,
@@ -105,9 +109,7 @@ fun EditNumberField(
             Text(stringResource(label))
         },
         singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal
-        ),
+        keyboardOptions = keyboardOptions,
         modifier = modifier
     )
 }
@@ -145,7 +147,8 @@ fun TipTimeLayout(
         modifier = modifier
             .statusBarsPadding()
             .padding(horizontal = 40.dp)
-            .safeDrawingPadding(),
+            .safeDrawingPadding()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -159,6 +162,10 @@ fun TipTimeLayout(
 
         EditNumberField(
             label = R.string.bill_amount,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
             value = amountInput,
             onValueChange = { amountInput = it },
             modifier = Modifier
@@ -168,6 +175,10 @@ fun TipTimeLayout(
 
         EditNumberField(
             label = R.string.tip_percentage,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
             value = tipInput,
             onValueChange = { tipInput = it },
             modifier = Modifier
