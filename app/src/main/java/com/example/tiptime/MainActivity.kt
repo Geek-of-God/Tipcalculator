@@ -33,6 +33,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.input.ImeAction
+import androidx.annotation.VisibleForTesting
 
 
 
@@ -53,7 +54,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private fun calculateTip(
+
+@VisibleForTesting
+internal fun calculateTip(
     amount: Double,
     tipPercent: Double = 15.0,
     roundUp: Boolean
