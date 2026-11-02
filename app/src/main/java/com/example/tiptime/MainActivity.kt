@@ -28,6 +28,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.annotation.StringRes
+import kotlin.math.ceil
+import androidx.compose.material3.Switch
+
 
 
 
@@ -49,16 +52,44 @@ class MainActivity : ComponentActivity() {
 
 private fun calculateTip(
     amount: Double,
-    tipPercent: Double = 15.0
+    tipPercent: Double = 15.0,
+    roundUp: Boolean
 ): String {
 
-    val tip = tipPercent / 100 * amount
+    var tip = tipPercent / 100 * amount
+
+    if (roundUp) {
+        tip = ceil(tip)
+    }
 
     return NumberFormat
         .getCurrencyInstance()
         .format(tip)
 }
 
+
+@Composable
+fun RoundTheTipRow(
+    roundUp: Boolean,
+    onRoundUpChanged: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = stringResource(R.string.round_up_tip)
+        )
+
+        Switch(
+            checked = roundUp,
+            onCheckedChange = onRoundUpChanged
+        )
+    }
+}
 
 @Composable
 fun EditNumberField(
@@ -95,13 +126,19 @@ fun TipTimeLayout(
         mutableStateOf("")
     }
 
+    var roundUp by remember {
+        mutableStateOf(false)
+    }
+
     val amount = amountInput.toDoubleOrNull() ?: 0.0
 
     val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
 
+
     val tip = calculateTip(
         amount,
-        tipPercent
+        tipPercent,
+        roundUp
     )
 
     Column(
@@ -134,8 +171,14 @@ fun TipTimeLayout(
             value = tipInput,
             onValueChange = { tipInput = it },
             modifier = Modifier
-                .padding(bottom = 32.dp)
+                .padding(bottom = 16.dp)
                 .fillMaxWidth()
+        )
+
+        RoundTheTipRow(
+            roundUp = roundUp,
+            onRoundUpChanged = { roundUp = it },
+            modifier = Modifier.padding(bottom = 32.dp)
         )
 
         Text(
